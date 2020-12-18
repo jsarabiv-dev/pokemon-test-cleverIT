@@ -30,28 +30,32 @@ public class UserServiceImpl implements UserService {
 	@SuppressWarnings("unchecked")
 	@Override
 	public ResponseEntity<?> getAllUsers() {
-		ResponseEntity<List> response = rt.getForEntity(URL_USER, List.class);
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		ResponseEntity<List> respEnt = rt.getForEntity(URL_USER, List.class);
 		List<User> userList = new ArrayList<>();
-		response.getBody().forEach( b -> {
+		
+		// Disculpen por este codigo tan feo, se deberia mejorar con programacion declarativa y genericos, no me dio mi capacidad tecnica, aun...
+		respEnt.getBody().forEach( b -> {
 			if (b instanceof ArrayList<?>) {
-				userList.add(gson.fromJson(((ArrayList) b).get(0).toString(), User.class));
+				userList.add(gson.fromJson(((ArrayList<?>) b).get(0).toString(), User.class));
 			}else {
-				System.out.println(b.toString());
 				try {
 					userList.add(gson.fromJson(b.toString(), User.class));
 				} catch (Exception e) {
-					logger.error("[+] Estimado no se pudo castear a objeto Usuario el usuario: ", b.toString());
+					logger.error("[-] Error al castear usuario");
 				}
 			}
 		});
 		
-		
         if(userList.isEmpty()) {
+        	response.put("mensaje", "No se han podido obtener usuarios");
+        	response.put("error", "No existen Usuarios");
         	return new ResponseEntity<List<User>>(userList, HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<User>>(userList, HttpStatus.OK);
-        
-        
+        response.put("users", userList);
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
 	@Override
@@ -59,17 +63,19 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<User> user = null;
 		try {
-			user = rt.getForEntity(URL_USER+id, User.class);
+			user = rt.getForEntity(URL_USER + id, User.class);
+			if (user == null) {
+				response.put("mensaje", "Usuario no encontrado");
+				response.put("error", "El usuario ID: ".concat((id.toString().concat(" no existe en la base de datos!"))));
+				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
 			response.put("mensaje", "Error al buscar el usuario con id: " + id);
 			response.put("error", e.getMessage().concat(": ".concat(e.getMessage())));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if(user == null) {
-			response.put("mensaje", "El usuario ID: ".concat((id.toString().concat(" no existe en la base de datos!"))));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-		}
-		return user;
+		response.put("user", user.getBody());
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
 	@Override
@@ -79,35 +85,41 @@ public class UserServiceImpl implements UserService {
 		try {
 			responseEnt = rt.postForEntity(URL_USER, user, User.class);
 		} catch (Exception e) {
-			response.put("mensaje", "Error al realizar el save del usuario");
+			response.put("mensaje", "Error al crear usuario");
 			response.put("error", e.getMessage().concat(": ".concat(e.getMessage())));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	
-		return responseEnt;
+		response.put("user", responseEnt.getBody());
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<?> editUser(User userNew) {
 		Map<String, Object> response = new HashMap<>();
-		
-		User usrBD = (User) this.findUser(userNew.getId()).getBody();
-		usrBD.setName(userNew.getName());
-		usrBD.setNombre(userNew.getNombre());
-		usrBD.setEmail(userNew.getEmail());
-		usrBD.setLastname(userNew.getLastname());
-		usrBD.setProfesion(userNew.getProfesion());
-		usrBD.setApellido(userNew.getApellido());
+		User userBD = null;
 
 		try {
-			rt.put(URL_USER+usrBD.getId(), usrBD);
+			
+			Map<String, Object> usr =  (Map<String, Object>) this.findUser(userNew.getId()).getBody();
+			
+			userBD = (User) usr.get("user");
+			
+			userBD.setName(userNew.getName());
+			userBD.setNombre(userNew.getNombre());
+			userBD.setEmail(userNew.getEmail());
+			userBD.setLastname(userNew.getLastname());
+			userBD.setProfesion(userNew.getProfesion());
+			userBD.setApellido(userNew.getApellido());
+			
+			rt.put(URL_USER + userBD.getId(), userBD);
+			
 		} catch (Exception e) {
 			response.put("mensaje", "Error al actualizar el usuario");
 			response.put("error", e.getMessage().concat(": ".concat(e.getMessage())));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-		response.put("mensaje", "El usuario ha sido actualizado con exito!");
+		response.put("user", userBD);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
@@ -116,15 +128,12 @@ public class UserServiceImpl implements UserService {
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			User usr = (User) this.findUser(id).getBody();
-			rt.delete(URL_USER+usr.getId(), User.class);
+			rt.delete(URL_USER + id, User.class);
 		} catch (Exception e) {
 			response.put("mensaje", "Error al eliminar el usuario");
 			response.put("error", e.getMessage().concat(": ".concat(e.getMessage())));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
-		response.put("mensaje", "El usuario ha sido eliminado con exito!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
