@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ import com.google.gson.Gson;
 
 @Service
 public class UserServiceImpl implements UserService {
+	
+	@Autowired
+	RestTemplateService rtService;
 
 	public final RestTemplate rt = new RestTemplate();
 	
@@ -29,11 +33,12 @@ public class UserServiceImpl implements UserService {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public ResponseEntity<?> getAllUsers() {
+	public ResponseEntity<Map<String, Object>> getAllUsers() {
 		
 		Map<String, Object> response = new HashMap<>();
 		
-		ResponseEntity<List> respEnt = rt.getForEntity(URL_USER, List.class);
+		ResponseEntity<List> respEnt = rtService.getAllUsers();
+		
 		List<User> userList = new ArrayList<>();
 		
 		// Disculpen por este codigo tan feo, se deberia mejorar con programacion declarativa y genericos, no me dio mi capacidad tecnica, aun...
@@ -52,18 +57,18 @@ public class UserServiceImpl implements UserService {
         if(userList.isEmpty()) {
         	response.put("mensaje", "No se han podido obtener usuarios");
         	response.put("error", "No existen Usuarios");
-        	return new ResponseEntity<List<User>>(userList, HttpStatus.NO_CONTENT);
+        	return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NO_CONTENT);
         }
         response.put("users", userList);
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 
 	@Override
-	public ResponseEntity<?> findUser(String id) {
+	public ResponseEntity<Map<String, Object>> findUser(String id) {
 		Map<String, Object> response = new HashMap<>();
 		ResponseEntity<User> user = null;
 		try {
-			user = rt.getForEntity(URL_USER + id, User.class);
+			user = rtService.findUser(id);
 			if (user == null) {
 				response.put("mensaje", "Usuario no encontrado");
 				response.put("error", "El usuario ID: ".concat((id.toString().concat(" no existe en la base de datos!"))));
@@ -79,11 +84,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<?> createUser(User user) {
+	public ResponseEntity<Map<String, Object>> createUser(User user) {
 		ResponseEntity<User> responseEnt = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			responseEnt = rt.postForEntity(URL_USER, user, User.class);
+			responseEnt = rtService.createUser(user);
 		} catch (Exception e) {
 			response.put("mensaje", "Error al crear usuario");
 			response.put("error", e.getMessage().concat(": ".concat(e.getMessage())));
@@ -94,7 +99,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<?> editUser(User userNew) {
+	public ResponseEntity<Map<String, Object>> editUser(User userNew) {
 		Map<String, Object> response = new HashMap<>();
 		User userBD = null;
 
@@ -111,7 +116,8 @@ public class UserServiceImpl implements UserService {
 			userBD.setProfesion(userNew.getProfesion());
 			userBD.setApellido(userNew.getApellido());
 			
-			rt.put(URL_USER + userBD.getId(), userBD);
+			
+			rtService.updateUser(userBD);
 			
 		} catch (Exception e) {
 			response.put("mensaje", "Error al actualizar el usuario");
@@ -124,11 +130,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<?> deleteUser(String id) {
+	public ResponseEntity<Map<String, Object>> deleteUser(String id) {
 		Map<String, Object> response = new HashMap<>();
 
 		try {
-			rt.delete(URL_USER + id, User.class);
+			rtService.deleteUser(id);
 		} catch (Exception e) {
 			response.put("mensaje", "Error al eliminar el usuario");
 			response.put("error", e.getMessage().concat(": ".concat(e.getMessage())));
