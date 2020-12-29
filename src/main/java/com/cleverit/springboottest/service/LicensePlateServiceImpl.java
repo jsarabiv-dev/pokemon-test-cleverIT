@@ -33,7 +33,7 @@ public class LicensePlateServiceImpl implements LicensePlateService {
 	LicensePlateDAOImpl licensePlateDAO;
 	
 	@Override
-	public ResponseEntity<?> getAllandSaveLicensePlate() {
+	public ResponseEntity<Map<String, Object>> getAllandSaveLicensePlate() {
 		Map<String, Object> response = new HashMap<>();
 
 		ResponseEntity<LicensePlate[]> respEnt = rt.getForEntity(URL_Plate_License, LicensePlate[].class);
