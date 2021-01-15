@@ -11,28 +11,18 @@ import com.cleverit.springboottest.core.service.PubSubService;
 import com.cleverit.springboottest.core.service.WSProviderService;
 import com.cleverit.springboottest.pubsub.PubSub;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -43,7 +33,6 @@ import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -464,7 +453,6 @@ public class WSProviderControllerTest {
     }
 
 
-
     @Test
     public void testGetPokemons500() throws Exception {
 
@@ -489,10 +477,71 @@ public class WSProviderControllerTest {
     @Test
     public void testGetPokemonById200() throws Exception {
 
+        PokemonDTO pokemonDTO = new PokemonDTO();
+        String id = "1";
 
+        Mockito.when(wsProviderService.getPokemonById(id)).thenReturn(pokemonDTO);
 
+        String contentAsString =
+                mockMvc.perform(get("/provider/pokemon/1").header("Content-type", "application/json"))
+                        .andDo(print())
+                        .andExpect(status().is(HttpStatus.OK.value()))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString();
+
+        PokemonDTO pokemonDTOReponse = objectMapper.readValue(contentAsString, PokemonDTO.class);
+        assertThat(pokemonDTOReponse, instanceOf(PokemonDTO.class));
 
     }
+
+    @Test
+    public void testGetPokemonById404() throws Exception {
+
+        String id = "1";
+        Mockito.when(wsProviderService.getPokemonById(id)).thenThrow(new NoSuchElementException("Pokemon with id " + id + " not found"));
+
+        String contentAsString =
+                mockMvc.perform(get("/provider/pokemon/" + id).header("Content-type", "application/json"))
+                        .andDo(print())
+                        .andExpect(status().is(HttpStatus.NOT_FOUND.value()))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString();
+
+        ErrorMessage errorMessageFromJson = objectMapper.readValue(contentAsString, ErrorMessage.class);
+        assertThat(errorMessageFromJson, instanceOf(ErrorMessage.class));
+        assertThat(errorMessageFromJson.getStatusCode(), equalTo(404));
+        assertThat(errorMessageFromJson.getMessage(), equalTo("Pokemon with id " + id + " not found"));
+
+    }
+
+    @Test
+    public void testGetPokemonById500() throws Exception {
+
+        String id = "1";
+
+        Mockito.when(wsProviderService.getPokemonById(id)).thenThrow(new RuntimeException());
+
+        String contentAsString =
+                mockMvc.perform(get("/provider/pokemon/" + id).header("Content-type", "application/json"))
+                        .andDo(print())
+                        .andExpect(status().is(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString();
+
+        ErrorMessage errorMessageFromJson = objectMapper.readValue(contentAsString, ErrorMessage.class);
+
+        assertThat(errorMessageFromJson, instanceOf(ErrorMessage.class));
+
+        assertThat(errorMessageFromJson.getStatusCode(),equalTo(500));
+
+        assertThat(errorMessageFromJson.getMessage(),equalTo("looks like something went wrong"));
+
+    }
+
+
 
 
 } 
