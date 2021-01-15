@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pubsub-project-264002",
+  "private_key_id": "7c76093364edb5084d8ccb15b473d08db11e28a5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCl7lJmMOklucHp\nChRUcHLn+7d5WV90Zo/QPO4tER6kxokebN9v2GnVOmaUKDXOom20SPYxZt+jP+FH\nhG8d6z3LiuCabcIP6DV/6KowllfpuTM8uTdFynuI4mjYUvJkSoo9Mrmj4MMSY6ig\nmr1Eui51qITxEZQwP2dUeq8eIxgBrOgjlz+EzOkpP1vJZ5FLG45wWVpLaNkuJgwi\n4hNoVKKsB4Na+OPZOmUkBpeJD9n30lEuXNbs21GddXkvEK+OAhCAkStsKw+KTpPk\nSu/Q1MWKVeb00wUMqim3rI3vGR3iwHCIhK5zExQJ2zBkqv8kDzWfiIW5i2vje4qy\nB6tK8OT1AgMBAAECggEAKDQZROde5iQe5p7plBf2z1x+9OkBpste1v6cWtEGEriD\n6ppIfOn7oo1W41jmyJ00ZXU0KX4ae4xzwgdFgQNJYrLQfrpPRdlmdQpjiggzXs7f\nqjvaN4+65MyuyJM4ZbJl0jQjJKDFwwPgjKFRcICH1zwwkdRHinUiTSa4nV21aFof\nQSgVXg3r5yVMLfGp+iaF7HnFtcAXY+BNHIKJiO20wmR0qduPwVKJxx95m0IW3O+2\n+QV2LDuZ9M1o71oMOl5Q2bzknHQ/hm2Pf73EymGvT06LyzmZFvwvYvNet+NPjP0g\nTG+rKhOTx7JWgW2bwnjwY5x6v5OGs2us0qlYFw/xQQKBgQDjCFyCJzh5At75HQmW\nEVtGZKa5+VWwCNW+3a6aZ2L1DIjTehZwpMkVdJDHIiYosr1OhsiHV/Ws+Kj9K2Ex\nU1gj0ChHpcUMPIlf8wtdE2qb6NJszVO9apLcjLPzM715m31hJJ7zwu+qEgmIqVqT\n3i00sJVVcZ62QwCUUm+zY6g3BQKBgQC7Gi0TdFK97+W1X/fFBtR7ItZuF6b22IvK\nu/HW8ElGDeDR/MWZF96uRzY3qs6jTs92PKbZEwXBRQ+Wjg9s4BDgKVgqami4wuDq\n69v6wZEFfFa4mSJhVpZu1AeOBgzlKg3iqLCtrofCU/AO0axkPhWtODGnvlXy7Fwy\npdmrUVl5MQKBgQCZj4ZC4pRoBXEbvnBFeOfr7Rh4ohU7RD6PIxJ+jX95kEjcAbA7\n8LmyMW3bw1VcIcm526C3Kt+ZZ3emBjlvS5hKYPldvNpTNH8WzyXYhtGNMyVhQmBp\ntjQvyVvOHCkEoA9mLYb2CdxhhGG+dg42Bgk9olLfwEJBtYAm0ruK8tVMoQKBgATs\nunUBoc/oCZbNkNr5xAv9rcE2FCn5JyzN556tsnAKm3lLevP9odnae/3ZHBlGUMWe\n8RFTo9ojdDaVRKir+SW9UNnE9T6vunXUgXTHNYb8b9fqB/Kh8dG2+P/u/tXlVno5\n0HSx3FbsGKx7LltxGub1TLFKnD6JpB+dJ+6PdJhxAoGAP6BEIW8Qj4fjHh8COOT0\nSLn8zCJtS4C9VYQAWYhc6eY6zzqLOt95eGDchFllUw8pC8PhltpOzWa/xgF87Lg4\ntrLz8YYk5O+m8ZNRbGEFBKVIqwNUF5ZieUoED1u+9fN4cSVThB+sO/X3B9dHnstC\nVLHEpfzVb1mi5aamCveh7IM=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cleverit-test-pokemon@pubsub-project-264002.iam.gserviceaccount.com",
+  "client_id": "110524970421766774741",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cleverit-test-pokemon%40pubsub-project-264002.iam.gserviceaccount.com"
+}
