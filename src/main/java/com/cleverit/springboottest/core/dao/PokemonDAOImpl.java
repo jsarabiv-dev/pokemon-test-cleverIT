@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor //TODO: COMO FUNCIONA ESTO?
+@RequiredArgsConstructor
 @Slf4j
 @Repository
 public class PokemonDAOImpl implements PokemonDAO {
