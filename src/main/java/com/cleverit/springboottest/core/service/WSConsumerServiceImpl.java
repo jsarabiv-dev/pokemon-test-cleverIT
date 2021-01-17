@@ -47,17 +47,17 @@ public class WSConsumerServiceImpl implements WSConsumerService {
                         ent.getValue().stream().forEach(move -> move.setTypeAttack(typeAttack));
                     });
             movesRepository.saveAll(Arrays.asList(moves));
-            String msg = "[+] Todo guardado mi pana !";
+            String msg = "Movimientos y Tipos de ataque guardados";
             log.info(msg);
             return msg;
         } catch (RuntimeException re) {
-            String msgError = String.format("[-] RuntimeException: {}", re.getCause());
+            String msgError = "A ocurrido un error, intente nuevamente.";
             log.error(msgError);
             return msgError;
         }
     }
 
-    @Override
+  /*  @Override
     public String getAlTypes() {
 
         TypeAttack[] resultado = restTemplate.getForObject("https://pokemonapi-4gm7aqn32q-nn.a.run.app/types/", TypeAttack[].class);
@@ -71,5 +71,5 @@ public class WSConsumerServiceImpl implements WSConsumerService {
         //typesRepository.saveAll(Arrays.asList(resultado));
 
         return  "";
-    }
+    }*/
 }

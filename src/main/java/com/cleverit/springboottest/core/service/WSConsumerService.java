@@ -6,6 +6,6 @@ public interface WSConsumerService {
 
     String getAllMovimientos() throws IOException;
 
-    String getAlTypes();
+//    String getAlTypes();
 
 }

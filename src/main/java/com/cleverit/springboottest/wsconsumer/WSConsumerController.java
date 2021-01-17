@@ -25,11 +25,11 @@ public class WSConsumerController {
         return consumerService.getAllMovimientos();
     }
 
-    @GetMapping("tipos")
+   /* @GetMapping("tipos")
     @ResponseStatus(HttpStatus.OK)
     public String getAllTipos(){
        return consumerService.getAlTypes();
-    }
+    }*/
 
 
 }

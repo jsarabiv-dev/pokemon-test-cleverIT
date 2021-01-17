@@ -11,7 +11,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,7 +25,7 @@ public class PubSubServiceImpl implements PubSubService {
     private final PokemonDAO pokemonDAO;
 
     @Override
-    public void savePokemon(String json) throws IOException {
+    public String savePokemon(String json) throws IOException {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -54,7 +53,9 @@ public class PubSubServiceImpl implements PubSubService {
 
         pokemon = pokemonDAO.savePokemon(pokemon);
 
-        log.info("Pokemon guardado, con Id: {}", pokemon.getId());
+//        log.debug("Pokemon guardado, con Id: {}", pokemon.getId());
+
+        return "Pokemon Guardado";
 
     }
 }

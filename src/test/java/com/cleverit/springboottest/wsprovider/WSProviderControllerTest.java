@@ -39,13 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 @WebMvcTest(WSProviderController.class)
 public class WSProviderControllerTest {
-
-//    @Autowired
-
 
     @Autowired
     private ObjectMapper objectMapper;

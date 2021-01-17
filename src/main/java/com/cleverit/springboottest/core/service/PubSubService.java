@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public interface PubSubService {
 
-    public void savePokemon(String json) throws IOException;
+    public String savePokemon(String json) throws IOException;
 
 
 }

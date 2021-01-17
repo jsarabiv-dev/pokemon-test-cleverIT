@@ -44,11 +44,7 @@ public class WSProviderServiceImpl implements WSProviderService {
         return movesRepository.findById(Long.parseLong(id))
                 .map(MoveMapper.INSTANCIA::MoveToMoveDTO)
                 .orElseThrow(() ->
-                {
-                    String s = "Move not found, whit id " ;
-
-                    return new NoSuchElementException(ConstantMsgError.MOVE_NOT_FOUND + id) ;
-                });
+                        new NoSuchElementException(ConstantMsgError.MOVE_NOT_FOUND + id));
     }
 
     @Override
