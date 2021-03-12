@@ -1,5 +1,6 @@
 package com.cleverit.springboottest.core.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class SpriteDTO {
 
     String backDefault;
 
+    @JsonIgnore
     PokemonDTO pokemon;
 
 }

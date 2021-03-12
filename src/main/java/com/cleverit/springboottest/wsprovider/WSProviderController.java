@@ -17,6 +17,7 @@ import java.util.List;
 @RequestMapping("provider")
 @Slf4j
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 public class WSProviderController {
 
 

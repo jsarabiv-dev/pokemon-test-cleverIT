@@ -75,6 +75,7 @@ public class PubSub {
     @Bean
     @ServiceActivator(inputChannel = "pubsubOutputChannel")
     public MessageHandler messageSender(PubSubOperations pubsubTemplate) {
+        log.info("[+] Message a enviar: " );
         return new PubSubMessageHandler(pubsubTemplate, "tema-salida");
     }
 

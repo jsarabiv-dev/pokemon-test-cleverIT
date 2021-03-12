@@ -1,5 +1,6 @@
 package com.cleverit.springboottest.core.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,5 +27,6 @@ public class MoveDTO {
 
     TypeAttackDTO typeAttack;
 
+    @JsonIgnore
     List<PokemonDTO> pokemon;
 }
